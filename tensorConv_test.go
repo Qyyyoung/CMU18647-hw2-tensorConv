@@ -2,9 +2,12 @@ package tensorConv
 
 import (
 	"fmt"
+	tensorConv "github.com/Qyyyoung/CMU18647-hw2-tensorConv"
 	"github.com/stretchr/testify/assert"
 	"math"
 	"math/rand"
+	"runtime"
+	"sync"
 	"testing"
 )
 
@@ -80,8 +83,18 @@ func TestTensorConvWithParallelism(t *testing.T) {
 	rank := 4
 	root := float64(1) / float64(rank)
 	rowSize := int (math.Pow(float64(totalSize) , root))
-	for i := range input {
-		go MoveElementOnByteSlice(input, output, i, rank, rowSize)
+	batchSize := runtime.GOMAXPROCS(0)
+	var wg sync.WaitGroup
+	for i:= 0; i < len(input); i += batchSize {
+		for j:=0; j < batchSize && j < len(input) - i; j++ {
+			address := i + j
+			wg.Add(1)
+			go func() {
+				defer wg.Done()
+				tensorConv.MoveElementOnByteSlice(input, output, address, rank, rowSize)
+			}()
+		}
+		wg.Wait()
 	}
 
 	rawInputIndex := []int{0, 1, 0, 1}
