@@ -1,42 +1,13 @@
 package tensorConv
 
 import (
-	"fmt"
 	"math"
-	"math/rand"
-	"time"
 )
 
 /*
-	This code performs basic demo that illustrate the implementation of our
-	tensor conversion algorithm in single thread
+	This code performs basic function that implements
+	tensor conversion algorithm
 */
-func main() {
-	power := 16
-	totalSize := int(math.Pow(2, float64(power)))
-	input := make([]byte, totalSize)
-	output := make([]byte, totalSize)
-	rand.Read(input)
-	fmt.Printf("Performing Tensor Conversion on %v byte array \n", totalSize)
-
-	startTime := time.Now()
-	rank := 2
-	maxRank := power
-	iteration := 0
-	for rank <= maxRank {
-		root := float64(1) / float64(rank)
-		// precondition: make sure rowSize is actually a int according to calculation
-		// otherwise the code wont work properly
-		rowSize := int (math.Pow(float64(totalSize) , root))
-		for i := range input {
-			MoveElementOnByteSlice(input, output, i, rank, rowSize)
-		}
-		rank *= 2
-		iteration += 1
-	}
-	duration := time.Since(startTime)
-	fmt.Printf("Conversion takes %v micro seconds to perform %v conversions", duration.Microseconds(), iteration)
-}
 
 func MoveElementOnIntSlice(input []int, output []int, address int, rank int, rowSize int) {
 	result := getDestinationIndex(address, rank, rowSize)
