@@ -7,7 +7,6 @@ import (
 	"math"
 	"math/rand"
 	"runtime"
-	"sync"
 	"testing"
 )
 
@@ -84,17 +83,13 @@ func TestTensorConvWithParallelism(t *testing.T) {
 	root := float64(1) / float64(rank)
 	rowSize := int (math.Round(math.Pow(float64(totalSize) , root)))
 	batchSize := runtime.GOMAXPROCS(0)
-	var wg sync.WaitGroup
 	for i:= 0; i < len(input); i += batchSize {
 		for j:=0; j < batchSize && j < len(input) - i; j++ {
 			address := i + j
-			wg.Add(1)
 			go func() {
-				defer wg.Done()
 				tensorConv.MoveElementOnByteSlice(input, output, address, rank, rowSize)
 			}()
 		}
-		wg.Wait()
 	}
 
 	rawInputIndex := []int{0, 1, 0, 1}
