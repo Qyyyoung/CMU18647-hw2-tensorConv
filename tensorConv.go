@@ -10,16 +10,16 @@ import (
 */
 
 func MoveElementOnIntSlice(input []int, output []int, address int, rank int, rowSize int) {
-	result := getDestinationIndex(address, rank, rowSize)
+	result := GetDestinationIndex(address, rank, rowSize)
 	output[result] = input[address]
 }
 
 func MoveElementOnByteSlice(input []byte, output []byte, address int, rank int, rowSize int) {
-	result := getDestinationIndex(address, rank, rowSize)
+	result := GetDestinationIndex(address, rank, rowSize)
 	output[result] = input[address]
 }
 
-func getDestinationIndex(address int, rank int, rowSize int) int {
+func GetDestinationIndex(address int, rank int, rowSize int) int {
 	// index in slice is shown as [index_(rank), index_(rank-1), ..., index_1, index_0]
 	// in other words, index 0 of Index slice stores the actual index for highest dimension
 	cIndex := make([]int, rank)
