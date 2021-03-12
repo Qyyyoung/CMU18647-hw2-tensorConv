@@ -21,7 +21,7 @@ func TestTensorConvWithIntSlice(t *testing.T) {
 
 	rank := 4
 	root := float64(1) / float64(rank)
-	rowSize := int (math.Pow(float64(totalSize) , root))
+	rowSize := int (math.Round(math.Pow(float64(totalSize) , root)))
 	for i := range input {
 		MoveElementOnIntSlice(input, output, i, rank, rowSize)
 	}
@@ -52,7 +52,7 @@ func TestTensorConvWithByteSlice(t *testing.T) {
 
 	rank := 4
 	root := float64(1) / float64(rank)
-	rowSize := int (math.Pow(float64(totalSize) , root))
+	rowSize := int (math.Round(math.Pow(float64(totalSize) , root)))
 	for i := range input {
 		MoveElementOnByteSlice(input, output, i, rank, rowSize)
 	}
@@ -82,7 +82,7 @@ func TestTensorConvWithParallelism(t *testing.T) {
 
 	rank := 4
 	root := float64(1) / float64(rank)
-	rowSize := int (math.Pow(float64(totalSize) , root))
+	rowSize := int (math.Round(math.Pow(float64(totalSize) , root)))
 	batchSize := runtime.GOMAXPROCS(0)
 	var wg sync.WaitGroup
 	for i:= 0; i < len(input); i += batchSize {
